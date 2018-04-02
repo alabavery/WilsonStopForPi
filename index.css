@@ -1,12 +1,11 @@
 .red {
     background-color: red;
 }
-.brown {
-    background-color: brown;
+.purple {
+    background-color: purple;
 }
 .tile {
     margin: 5px;
-    padding: 12px;
+    padding: 30px;
     color: white;
-    font-size: xx-large;
 }

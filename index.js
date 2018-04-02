@@ -1,8 +1,8 @@
-const transitOptions = {
+var transitOptions = {
   departureTime: new Date(Date.now()),
   modes: ['TRAM'],
 };
-const directionsRequest = {
+var directionsRequest = {
   origin: new google.maps.LatLng(41.965581, -87.6612554), // LatLng | String | google.maps.Place,
   destination: new google.maps.LatLng(41.895943, -87.645888), // LatLng | String | google.maps.Place,
   travelMode: 'TRANSIT',
@@ -14,13 +14,22 @@ const directionsRequest = {
 const directionsService = new google.maps.DirectionsService;
 
 directionsService.route(directionsRequest, function (result, status) {
-  setInterval(function(){
+  removeAllTiles();
+  const rawRoutes = result.routes;
+  const refinedRoutes = refineRoutes(rawRoutes);
+  addToDocument(refinedRoutes);
+});
+
+setInterval(function() {
+  directionsRequest.transitOptions.departureTime = new Date(Date.now());
+  directionsService.route(directionsRequest, function (result, status) {
     removeAllTiles();
     const rawRoutes = result.routes;
     const refinedRoutes = refineRoutes(rawRoutes);
     addToDocument(refinedRoutes);
-  }, 3000);
-});
+  });
+}, 50000);
+
 
 function refineRoutes(routes) {
   return routes;
@@ -29,8 +38,8 @@ function refineRoutes(routes) {
 function addToDocument(refinedRoutes) {
   refinedRoutes.forEach(function(route) {
     var tileDiv = document.createElement('div');
-    var lineDiv = document.createElement('div');
-    var departureDiv = document.createElement('div');
+    var lineDiv = document.createElement('h1');
+    var departureDiv = document.createElement('h1');
 
     tileDiv.classList.add('tile');
     lineDiv.classList.add('lineName');
@@ -49,8 +58,8 @@ function addToDocument(refinedRoutes) {
 
     if (line.substring(0,3) === 'Red') {
       tileDiv.classList.add('red');
-    } else if (line.substring(0,3) === 'Bro') {
-      tileDiv.classList.add('brown');
+    } else if (line.substring(0,3) === 'Pur') {
+      tileDiv.classList.add('purple');
     }
 
     tileDiv.appendChild(lineDiv);
